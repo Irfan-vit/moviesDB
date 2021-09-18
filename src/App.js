@@ -1,7 +1,7 @@
-import "./App.css";
-import { useState } from "react";
+import React, { useState } from "react";
+import "./styles.css";
 
-const MOVIES_DATA = {
+var MOVIES_DATA = {
   TVShows: [
     {
       title: "The Falcon and the Winter Soldier",
@@ -107,62 +107,58 @@ const MOVIES_DATA = {
   ]
 };
 
-const GENRES = Object.keys(MOVIES_DATA);
+var moviesWeKnow = Object.keys(MOVIES_DATA);
 
-function App() {
-  const [movies, setMovies] = useState(MOVIES_DATA.TVShows);
-
+export default function App() {
+  var [show, setShow] = useState("");
+  function moviesDetails(movies) {
+    var shows = MOVIES_DATA[movies].map((items) => {
+      return (
+        <section className="movies-list">
+          <div className="styl">
+            <h1 style={{ textAlign: "center" }}>{items.title}</h1>
+            <div>
+              <img src={items.poster} />
+              <p>{items.summary}</p>
+              <h2 style={{ textAlign: "center" }}>{items.rating}</h2>
+            </div>
+          </div>
+        </section>
+      );
+    });
+    setShow(shows);
+  }
   return (
     <div className="App">
       <div className="container">
         <header className="App-header">
-          <h1 className="ctr">Premier Shows 🎬</h1>
+          <h1 style={{ textAlign: "center" }} className="ctr">
+            Premier Shows 🎬
+          </h1>
           <p style={{ textAlign: "center" }}>
             Select a Category to find the best shows.
           </p>
         </header>
-        {
-          <div className="btns">
-            {GENRES.map((item) => {
-              return (
-                <button
-                  onClick={(e) => {
-                    setMovies(MOVIES_DATA[item]);
-                  }}
-                >
-                  {item}
-                </button>
-              );
-            })}
-          </div>
-        }
 
-        <section className="movies-list">
-          {movies.map((movie) => {
-            return <MovieTile movie={movie} key={movie.title} />;
+        <div style={{ textAlign: "center" }} className="btns">
+          {moviesWeKnow.map((movies) => {
+            return (
+              <button
+                onClick={function () {
+                  return moviesDetails(movies);
+                }}
+                key={movies}
+              >
+                {movies}
+              </button>
+            );
           })}
-        </section>
+        </div>
+
+        <div>
+          <div className="cent">{show}</div>
+        </div>
       </div>
     </div>
   );
 }
-
-const Tab = ({ children, onClick }) => {
-  return <button onClick={onClick}>{children}</button>;
-};
-
-const MovieTile = ({ movie }) => {
-  const { title, poster, summary, rating } = movie;
-  return (
-    <div className="styl">
-      <img alt={title} className="poster" src={poster} />
-      <div>
-        <h3>{title}</h3>
-        <p>{summary}</p>
-        <h2>{rating}</h2>
-      </div>
-    </div>
-  );
-};
-
-export default App;
